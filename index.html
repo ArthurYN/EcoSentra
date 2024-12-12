@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EcoSentra</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <div id="loadingOverlay" class="loading-overlay">
+    <div class="loading-text">EcoSentra</div>
+  </div>
+
+  <div id="homePage" style="display:none;">
+    <!-- Konten halaman Home -->
+    <h1>Selamat datang di EcoSentra!</h1>
+    <p>Ini adalah halaman utama.</p>
+  </div>
+
+  <div id="popupContainer" class="popup-container">
+    <div id="popup" class="popup">Rangkuman berita 1</div>
+    <div class="popup-controls">
+      <button onclick="prevNews()">&#8592; Sebelumnya</button>
+      <button onclick="nextNews()">Berikutnya &#8594;</button>
+    </div>
+  </div>
+
+  <div id="carbonCalculator" class="popup-container">
+    <div class="popup">
+      <h3>Hitung Jejak Karbon Anda</h3>
+      <div class="form-group">
+        <label for="distance">Jarak perjalanan (km):</label>
+        <input type="number" id="distance" placeholder="Masukkan jarak">
+      </div>
+      <div class="form-group">
+        <label for="fuel">Efisiensi bahan bakar (km/l):</label>
+        <input type="number" id="fuel" placeholder="Masukkan efisiensi">
+      </div>
+      <button onclick="calculateCarbon()">Hitung</button>
+      <p id="result"></p>
+    </div>
+  </div>
+
+  <div id="bikeTracker" class="popup-container">
+    <div class="popup">
+      <h3>Bike Tracker</h3>
+      <div class="stopwatch">
+        <p>Waktu: <span id="timer">00:00:00</span></p>
+        <button id="startStopBtn" onclick="toggleTimer()">Mulai</button>
+        <button id="resetBtn" onclick="resetTimer()">Reset</button>
+      </div>
+      <div class="form-group">
+        <label for="bikeDistance">Jarak Tempuh (km):</label>
+        <input type="number" id="bikeDistance" placeholder="Masukkan jarak tempuh">
+      </div>
+      <p id="bikeStats"></p>
+    </div>
+  </div>
+  
+
+  <nav>
+    
+    <a href="#search" onclick="showCarbonCalculator()">
+      <div class="icon">🔍</div>
+      <span>Carbon</span>
+    </a>
+    <a href="#home" onclick="showPopup()">
+      <div class="icon">🏠</div>
+      <span>Home</span>
+    </a>
+    <a href="#profile" onclick="showProfile()">
+      <div class="icon">👤</div>
+      <span>Bike Tracker</span>
+    </a>
+  </nav>
+
+  <script src="scripts.js"></script>
+</body>
+</html>

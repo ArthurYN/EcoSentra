@@ -1,0 +1,213 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    min-height: 100vh;
+    overflow: hidden;
+  }
+  
+  nav {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: #fff;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0;
+  }
+  
+  nav a {
+    text-decoration: none;
+    color: #555;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  nav a .icon {
+    width: 50px;
+    height: 50px;
+    background-color: #18d100;
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    margin-bottom: 5px;
+    transition: background-color 0.3s;
+  }
+  
+  nav a .icon:hover {
+    background-color: #2c8b00;
+  }
+  
+  nav a span {
+    font-size: 14px;
+  }
+  
+  .popup-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 600px;
+    background: #fff;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    border-radius: 15px;
+    overflow: hidden;
+    display: none;
+    flex-direction: column;
+    animation: fadeIn 0.5s ease;
+  }
+  
+  .popup {
+    padding: 30px;
+    text-align: justify;
+    font-size: 18px;
+    color: #333;
+    line-height: 1.5;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+    text-align: left;
+  }
+  
+  .popup-controls {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px;
+    background: #f0f0f0;
+  }
+  
+  .popup-controls button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    background-color: #18d100;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .popup-controls button:hover {
+    background-color: #2c8b00;
+  }
+
+  #bikeTracker {
+    display: none; /* Disembunyikan terlebih dahulu */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 600px;
+    background: #fff;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    border-radius: 15px;
+    overflow: hidden;
+    flex-direction: column;
+    animation: fadeIn 0.5s ease;
+  }
+  
+  #bikeTracker .stopwatch {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  #bikeTracker #timer {
+    font-size: 24px;
+    font-weight: bold;
+    color: #18d100;
+  }
+  
+  #bikeTracker button {
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #18d100;
+    color: white;
+    cursor: pointer;
+    border: none;
+  }
+  
+  #bikeTracker button:hover {
+    background-color: #2c8b00;
+  }
+  
+  .loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+  }
+  
+  .loading-overlay.show {
+    opacity: 1.5;
+    visibility: visible;
+  }
+  
+  .loading-text {
+    font-size: 24px;
+    color: #18d100;
+    font-weight: bold;
+  }
+
+  .slide-left {
+    animation: slideLeft 0.5s forwards;
+  }
+  
+  .slide-right {
+    animation: slideRight 0.5s forwards;
+  }
+  
+  @keyframes slideLeft {
+    from {
+      transform: translateX(100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+  
+  @keyframes slideRight {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translate(-50%, -60%);
+    }
+    to {
+      opacity: 1;
+      transform: translate(-50%, -50%);
+    }
+  }
