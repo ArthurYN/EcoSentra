@@ -5,7 +5,7 @@ const bikeTracker = document.getElementById('bikeTracker');
 const result = document.getElementById('result');
 const loadingOverlay = document.getElementById('loadingOverlay');
 const newsSummaries = [
-  "Rangkuman ",
+  "",
   "Rangkuman berita 2",
   "Rangkuman berita 3"
 ];
@@ -22,8 +22,6 @@ function showHomePage() {
   document.getElementById("carbonCalculator").style.display = 'none';
   document.getElementById("homePage").style.display = 'block'; // Navigasi ke Home
 }
-
-
 
 let currentNewsIndex = 0;
 
@@ -79,19 +77,6 @@ function showProfile() {
   });
 }
 
-let timerInterval;
-let isTimerRunning = false;
-let secondsElapsed = 0;
-let distance = 0; // Jarak dalam km
-let caloriesBurned = 0;
-let initialTime = null; // Waktu mulai penghitungan
-
-const timerDisplay = document.getElementById('timer');
-const bikeStats = document.getElementById('bikeStats');
-const startStopBtn = document.getElementById('startStopBtn');
-const resetBtn = document.getElementById('resetBtn');
-const bikeDistanceInput = document.getElementById('bikeDistance');
-
 function calculateCarbon() {
   const distance = parseFloat(document.getElementById('distance').value);
   const fuelEfficiency = parseFloat(document.getElementById('fuel').value);
@@ -105,72 +90,72 @@ function calculateCarbon() {
   result.textContent = `Jejak karbon Anda: ${carbonEmission.toFixed(2)} kg CO2.`;
 }
 
+let trackingInterval;
+let timerInterval;
+let totalCalories = 0;
+let isTracking = false; // Status tracking
+let startTime;
 
+function showBikeTracker() {
+  document.getElementById('bikeTracker').style.display = 'block';
+}
 
-// Fungsi untuk memulai dan menghentikan timer
-function toggleTimer() {
-  if (isTimerRunning) {
-    clearInterval(timerInterval);
-    startStopBtn.textContent = 'Mulai';
-    isTimerRunning = false;
+function startBikeTracking() {
+  if (isTracking) return; // Jika sudah tracking, abaikan
+
+  const startStopBtn = document.getElementById('startStopBtn');
+  startStopBtn.textContent = 'Tracking Dimulai';
+  startStopBtn.classList.add('tracking-started');
+
+  startTime = Date.now();
+  timerInterval = setInterval(updateTimer, 1000);
+
+  if (navigator.geolocation) {
+    trackingInterval = setInterval(() => {
+      navigator.geolocation.getCurrentPosition((position) => {
+        const speed = position.coords.speed || 0; // Kecepatan dalam m/s
+        const speedKmH = (speed * 3.6).toFixed(2); // Konversi ke km/j
+        document.getElementById('speed').textContent = speedKmH;
+
+        const caloriesBurned = calculateCalories(speedKmH);
+        totalCalories += caloriesBurned;
+        document.getElementById('calories').textContent = totalCalories.toFixed(2);
+      });
+    }, 1000);
+    isTracking = true;
   } else {
-    startStopBtn.textContent = 'Hentikan';
-    isTimerRunning = true;
-    initialTime = Date.now(); // Waktu mulai
-    timerInterval = setInterval(updateTimer, 1000);
+    alert("Geolocation tidak didukung oleh browser ini.");
   }
 }
 
-// Fungsi untuk memperbarui timer
-function updateTimer() {
-  secondsElapsed++;
-  const hours = Math.floor(secondsElapsed / 3600);
-  const minutes = Math.floor((secondsElapsed % 3600) / 60);
-  const seconds = secondsElapsed % 60;
-  
-  timerDisplay.textContent = `${padTime(hours)}:${padTime(minutes)}:${padTime(seconds)}`;
-  
-  // Menghitung kalori berdasarkan kecepatan rata-rata
-  if (initialTime && distance > 0) {
-    const elapsedTimeInHours = (Date.now() - initialTime) / 3600000; // Waktu dalam jam
-    const averageSpeed = distance / elapsedTimeInHours; // Kecepatan rata-rata km/jam
-    caloriesBurned = averageSpeed * 40; // Asumsi kalori terbakar 40 per km pada kecepatan tertentu
-    updateStats();
-  }
-}
+function stopBikeTracking() {
+  if (!isTracking) return; // Jika belum tracking, abaikan
 
-// Fungsi untuk menambahkan nol di depan angka kurang dari 10
-function padTime(num) {
-  return num < 10 ? '0' + num : num;
-}
-
-// Fungsi untuk mengatur ulang timer
-function resetTimer() {
+  clearInterval(trackingInterval);
   clearInterval(timerInterval);
-  isTimerRunning = false;
-  secondsElapsed = 0;
-  timerDisplay.textContent = '00:00:00';
+
+  alert(`Tracking dihentikan. Total kalori terbakar: ${totalCalories.toFixed(2)} kcal`);
+
+  const startStopBtn = document.getElementById('startStopBtn');
   startStopBtn.textContent = 'Mulai';
-  caloriesBurned = 0;
-  distance = 0;
-  bikeDistanceInput.value = '';
-  bikeStats.textContent = '';
-  initialTime = null; // Reset waktu mulai
+  startStopBtn.classList.remove('tracking-started');
+
+  isTracking = false;
 }
 
-// Fungsi untuk memperbarui statistik
-function updateStats() {
-  bikeStats.textContent = `
-    Jarak Tempuh: ${distance} km
-    Kecepatan Rata-rata: ${(distance / (secondsElapsed / 3600)).toFixed(2)} km/jam
-    Kalori Terbakar: ${caloriesBurned.toFixed(0)} kalori
-  `;
+function calculateCalories(speedKmH) {
+  if (speedKmH <= 0) return 0;
+  return 0.029 * speedKmH; // Estimasi sederhana: 0.029 kcal per km/j
 }
 
-// Fungsi untuk memperbarui jarak dan menghitung ulang kalori
-bikeDistanceInput.addEventListener('input', function() {
-  distance = parseFloat(bikeDistanceInput.value);
-  if (!isNaN(distance) && distance > 0) {
-    updateStats();
-  }
-});
+function updateTimer() {
+  const now = Date.now();
+  const elapsed = now - startTime;
+
+  const hours = Math.floor(elapsed / (1000 * 60 * 60));
+  const minutes = Math.floor((elapsed % (1000 * 60 * 60)) / (1000 * 60));
+  const seconds = Math.floor((elapsed % (1000 * 60)) / 1000);
+
+  document.getElementById('timer').textContent = 
+    `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+}
