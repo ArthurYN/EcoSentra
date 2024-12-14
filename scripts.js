@@ -5,17 +5,38 @@ const bikeTracker = document.getElementById('bikeTracker');
 const result = document.getElementById('result');
 const loadingOverlay = document.getElementById('loadingOverlay');
 const newsSummaries = [
-  "",
-  "Rangkuman berita 2",
-  "Rangkuman berita 3"
+  "Berita 1: Lingkungan hidup di Indonesia.",
+  "Berita 2: Kemajuan energi terbarukan.",
+  "Berita 3: Tips hidup ramah lingkungan."
 ];
 
+function hideIntroPage() {
+  const introPage = document.getElementById('introPage');
+  // Tambahkan kelas animasi
+  introPage.classList.add('hide');
+  setTimeout(() => {
+    introPage.style.display = 'none'; // Sembunyikan setelah animasi selesai
+    document.getElementById('homePage').style.display = 'block'; // Tampilkan halaman utama
+  }, 800); // Sesuaikan dengan durasi animasi
+}
+// Tampilkan intro page saat halaman dimuat
 window.onload = function() {
-  document.title = "EcoSentra"; // Set title saat halaman dimuat
-  document.getElementById("popupContainer").style.display = 'none';
-  document.getElementById("carbonCalculator").style.display = 'none';
-  document.getElementById("homePage").style.display = 'block'; // Menampilkan Home
+  document.getElementById('introPage').style.display = 'flex';
+  document.getElementById('homePage').style.display = 'none';
 };
+
+// Gradient mengikuti kursor
+const introPage = document.getElementById('introPage');
+document.addEventListener('mousemove', (e) => {
+  const { clientX, clientY } = e;
+  const width = window.innerWidth;
+  const height = window.innerHeight;
+
+  const xPercent = (clientX / width) * 100;
+  const yPercent = (clientY / height) * 100;
+
+  introPage.style.backgroundPosition = `${xPercent}% ${yPercent}%`;
+});
 
 function showHomePage() {
   document.getElementById("popupContainer").style.display = 'none';
@@ -26,14 +47,24 @@ function showHomePage() {
 let currentNewsIndex = 0;
 
 function nextNews() {
-  currentNewsIndex = (currentNewsIndex + 1) % newsSummaries.length;
-  popup.classList.remove('slide-right', 'slide-left');
-  popup.offsetWidth; // Trigger reflow
-  popup.classList.add('slide-left');
+  currentNewsIndex = (currentNewsIndex + 1) % newsSummaries.length; // Loop kembali ke awal
+  updateNews('slide-left');
+}
+
+function prevNews() {
+  currentNewsIndex = (currentNewsIndex - 1 + newsSummaries.length) % newsSummaries.length; // Loop ke akhir
+  updateNews('slide-right');
+}
+
+function updateNews(animationClass) {
+  popup.classList.remove('slide-left', 'slide-right');
+  popup.offsetWidth; // Trigger reflow untuk reset animasi
+  popup.classList.add(animationClass);
+
   setTimeout(() => {
-    popup.textContent = newsSummaries[currentNewsIndex];
-    popup.classList.remove('slide-left');
-  }, 500);
+    popup.textContent = newsSummaries[currentNewsIndex]; // Tampilkan berita sesuai indeks
+    popup.classList.remove(animationClass); // Hapus animasi setelah selesai
+  }, 500); // Sinkronkan dengan durasi animasi CSS
 }
 
 function showLoading() {
