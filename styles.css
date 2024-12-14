@@ -13,6 +13,8 @@
     overflow: hidden;
   }
   
+
+  
   nav {
     position: fixed;
     bottom: 0;
@@ -117,7 +119,7 @@
   }
 
   .home-page {
-    display: none;
+    display: flex;
     padding: 20px;
   }
   
@@ -136,10 +138,25 @@
     flex-direction: column;
     animation: fadeIn 0.5s ease;
   }
+  #guidePopup {
+    display: none; 
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    max-width: 600px;
+    background: rgba(255, 255, 255, 0.8);
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: justify;
+  }
+ 
   
   .popup {
     padding: 30px;
-    text-align: justify;
+    text-align: center;
     font-size: 18px;
     color: #333;
     line-height: 1.5;

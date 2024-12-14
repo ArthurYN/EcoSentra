@@ -5,27 +5,30 @@ const bikeTracker = document.getElementById('bikeTracker');
 const result = document.getElementById('result');
 const loadingOverlay = document.getElementById('loadingOverlay');
 const newsSummaries = [
-  "Berita 1: Lingkungan hidup di Indonesia.",
-  "Berita 2: Kemajuan energi terbarukan.",
-  "Berita 3: Tips hidup ramah lingkungan."
+  "Perkembangan Energi Terbarukan di Indonesia: Indonesia semakin mempercepat pengembangan energi terbarukan dengan fokus pada panel surya dan tenaga angin. Pemerintah menargetkan penggunaan energi terbarukan mencapai 23% pada tahun 2025 untuk mengurangi ketergantungan pada energi fosil.",
+  "Solusi Mengurangi Sampah Plastik di Laut: Pemerintah dan LSM lokal bekerja sama untuk mengurangi sampah plastik di laut dengan program pengumpulan dan daur ulang plastik. Kampanye ini bertujuan untuk melibatkan masyarakat dalam menjaga kebersihan laut.",
+  "Tantangan Perubahan Iklim dan Mitigasinya: Perubahan iklim semakin menjadi ancaman global. Banyak negara, termasuk Indonesia, melaksanakan langkah-langkah mitigasi untuk mengurangi dampak perubahan iklim dengan menanam pohon dan beralih ke energi bersih."
 ];
 
 function hideIntroPage() {
   const introPage = document.getElementById('introPage');
-  // Tambahkan kelas animasi
   introPage.classList.add('hide');
   setTimeout(() => {
-    introPage.style.display = 'none'; // Sembunyikan setelah animasi selesai
-    document.getElementById('homePage').style.display = 'block'; // Tampilkan halaman utama
-  }, 800); // Sesuaikan dengan durasi animasi
+    introPage.style.display = 'none';
+    document.getElementById('homePage').style.display = 'block';
+    setTimeout(showGuidePopup, 800); 
+  }, 800);
 }
-// Tampilkan intro page saat halaman dimuat
-window.onload = function() {
-  document.getElementById('introPage').style.display = 'flex';
-  document.getElementById('homePage').style.display = 'none';
-};
 
-// Gradient mengikuti kursor
+function hideGuidePopup() {
+  document.getElementById('guidePopup').style.display = 'none'; 
+  document.getElementById('homePage').style.display = 'block'; 
+}
+
+
+document.getElementById('closeGuidePopupButton').addEventListener('click', hideGuidePopup);
+
+
 const introPage = document.getElementById('introPage');
 document.addEventListener('mousemove', (e) => {
   const { clientX, clientY } = e;
@@ -36,35 +39,54 @@ document.addEventListener('mousemove', (e) => {
   const yPercent = (clientY / height) * 100;
 
   introPage.style.backgroundPosition = `${xPercent}% ${yPercent}%`;
-});
+});   
+
+function showGuidePopup() {
+  console.log("Popup sedang ditampilkan...");
+  document.getElementById('guidePopup').style.display = 'flex';
+}
+
+function hideGuidePopup() {
+  console.log("Popup sedang disembunyikan...");
+  document.getElementById('guidePopup').style.display = 'none';
+}
+
+
+
+window.onload = function() {
+  document.getElementById('introPage').style.display = 'flex';
+  document.getElementById('guidePopup').style.display = 'none';
+  setTimeout(() => showGuidePopup(), 1000);
+};
 
 function showHomePage() {
   document.getElementById("popupContainer").style.display = 'none';
   document.getElementById("carbonCalculator").style.display = 'none';
-  document.getElementById("homePage").style.display = 'block'; // Navigasi ke Home
+  document.getElementById("bikeTracker").style.display = 'none';
+  document.getElementById("guidePopup").style.display = 'block';
 }
 
 let currentNewsIndex = 0;
 
 function nextNews() {
-  currentNewsIndex = (currentNewsIndex + 1) % newsSummaries.length; // Loop kembali ke awal
+  currentNewsIndex = (currentNewsIndex + 1) % newsSummaries.length;
   updateNews('slide-left');
 }
 
 function prevNews() {
-  currentNewsIndex = (currentNewsIndex - 1 + newsSummaries.length) % newsSummaries.length; // Loop ke akhir
+  currentNewsIndex = (currentNewsIndex - 1 + newsSummaries.length) % newsSummaries.length;
   updateNews('slide-right');
 }
 
 function updateNews(animationClass) {
   popup.classList.remove('slide-left', 'slide-right');
-  popup.offsetWidth; // Trigger reflow untuk reset animasi
+  popup.offsetWidth;
   popup.classList.add(animationClass);
 
   setTimeout(() => {
-    popup.textContent = newsSummaries[currentNewsIndex]; // Tampilkan berita sesuai indeks
-    popup.classList.remove(animationClass); // Hapus animasi setelah selesai
-  }, 500); // Sinkronkan dengan durasi animasi CSS
+    popup.textContent = newsSummaries[currentNewsIndex];
+    popup.classList.remove(animationClass);
+  }, 500);
 }
 
 function showLoading() {
@@ -87,7 +109,7 @@ function showPopup() {
   delayedAction(() => {
     popupContainer.style.display = 'flex';
     carbonCalculator.style.display = 'none';
-    bikeTracker.style.display = 'none'; // Pastikan tracker disembunyikan saat popup Home
+    bikeTracker.style.display = 'none';
     popup.textContent = newsSummaries[currentNewsIndex];
   });
 }
@@ -96,15 +118,15 @@ function showCarbonCalculator() {
   delayedAction(() => {
     carbonCalculator.style.display = 'flex';
     popupContainer.style.display = 'none';
-    bikeTracker.style.display = 'none'; // Menyembunyikan tracker jika berganti ke Calculator
+    bikeTracker.style.display = 'none';
   });
 }
 
 function showProfile() {
   delayedAction(() => {
-    popupContainer.style.display = 'none'; // Sembunyikan popup lain
-    carbonCalculator.style.display = 'none'; // Sembunyikan calculator
-    bikeTracker.style.display = 'flex'; // Menampilkan bike tracker saat Profile ditekan
+    popupContainer.style.display = 'none';
+    carbonCalculator.style.display = 'none';
+    bikeTracker.style.display = 'flex';
   });
 }
 
@@ -117,22 +139,18 @@ function calculateCarbon() {
     return;
   }
 
-  const carbonEmission = (distance / fuelEfficiency) * 2.31; // CO2 in kg assuming 2.31 kg/l
+  const carbonEmission = (distance / fuelEfficiency) * 2.31;
   result.textContent = `Jejak karbon Anda: ${carbonEmission.toFixed(2)} kg CO2.`;
 }
 
 let trackingInterval;
 let timerInterval;
 let totalCalories = 0;
-let isTracking = false; // Status tracking
+let isTracking = false;
 let startTime;
 
-function showBikeTracker() {
-  document.getElementById('bikeTracker').style.display = 'block';
-}
-
 function startBikeTracking() {
-  if (isTracking) return; // Jika sudah tracking, abaikan
+  if (isTracking) return;
 
   const startStopBtn = document.getElementById('startStopBtn');
   startStopBtn.textContent = 'Tracking Dimulai';
@@ -144,8 +162,8 @@ function startBikeTracking() {
   if (navigator.geolocation) {
     trackingInterval = setInterval(() => {
       navigator.geolocation.getCurrentPosition((position) => {
-        const speed = position.coords.speed || 0; // Kecepatan dalam m/s
-        const speedKmH = (speed * 3.6).toFixed(2); // Konversi ke km/j
+        const speed = position.coords.speed || 0;
+        const speedKmH = (speed * 3.6).toFixed(2);
         document.getElementById('speed').textContent = speedKmH;
 
         const caloriesBurned = calculateCalories(speedKmH);
@@ -160,7 +178,7 @@ function startBikeTracking() {
 }
 
 function stopBikeTracking() {
-  if (!isTracking) return; // Jika belum tracking, abaikan
+  if (!isTracking) return;
 
   clearInterval(trackingInterval);
   clearInterval(timerInterval);
@@ -176,7 +194,7 @@ function stopBikeTracking() {
 
 function calculateCalories(speedKmH) {
   if (speedKmH <= 0) return 0;
-  return 0.029 * speedKmH; // Estimasi sederhana: 0.029 kcal per km/j
+  return 0.029 * speedKmH;
 }
 
 function updateTimer() {

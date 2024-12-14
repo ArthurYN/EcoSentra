@@ -18,12 +18,18 @@
     <button onclick="hideIntroPage()">Mulai</button>
   </div>
   
-  <div id="homePage" class="home-page">
-    <h2>Konten Utama</h2>
-    <p>Ini adalah halaman utama setelah layar pengenalan.</p>
-  </div>
-
-  <div id="popupContainer" class="popup-container">
+<div id="guidePopup" class="popup-container" style="display:none;">
+    <div class="popup">
+      <h3>Panduan Fitur</h3>
+      <p><strong>Berita</strong>: Menyajikan berbagai berita menarik tentang lingkungan dan kehidupan berkelanjutan.</p>
+      <p><strong>Kalkulator Jejak Karbon</strong>: Hitung jejak karbon yang Anda hasilkan.</p>
+      <p><strong>Bike Tracker</strong>: Lacak aktivitas bersepeda Anda.</p>
+      <button id="closeGuidePopupButton" onclick="hideGuidePopup()">Tutup</button>
+    </div>
+    </div>
+  
+  
+  <div id="popupContainer" class="popup-container" style="display: none;">
     <div id="popup" class="popup">Rangkuman berita 1</div>
     <div class="popup-controls">
       <button onclick="prevNews()">&#8592; Sebelumnya</button>
@@ -31,7 +37,11 @@
     </div>
   </div>
 
-  <div id="carbonCalculator" class="popup-container">
+    
+  
+
+  </div>
+  <div id="carbonCalculator" class="popup-container" style="display: none;">
     <div class="popup">
       <h3>Hitung Jejak Karbon Anda</h3>
       <div class="form-group">
@@ -60,10 +70,8 @@
     </div>
   </div>
 
-
-
   <nav>
-    <a href="#search" onclick="showCarbonCalculator()">
+    <a href="#carbon" onclick="showCarbonCalculator()">
       <div class="icon">🔍</div>
       <span>Carbon</span>
     </a>
@@ -71,7 +79,7 @@
       <div class="icon">🏠</div>
       <span>Home</span>
     </a>
-    <a href="#profile" onclick="showProfile()">
+    <a href="#biketracker" onclick="showProfile()">
       <div class="icon">👤</div>
       <span>Bike Tracker</span>
     </a>
